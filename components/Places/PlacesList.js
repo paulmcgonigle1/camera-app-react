@@ -1,4 +1,4 @@
-import { FlatList, View, Text } from "react-native";
+import { FlatList, View, Text, Image } from "react-native";
 import PlaceItem from "./PlaceItem";
 import { StyleSheet } from "react-native";
 import { Colors } from "../../constants/colors";
