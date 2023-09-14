@@ -49,7 +49,11 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: "bold",
+    fontSize: 16,
     color: Colors.gray700,
   },
-  address: {},
+  address: {
+    fontSize: 16,
+    color: Colors.gray700,
+  },
 });
