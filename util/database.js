@@ -99,7 +99,7 @@ export function fetchPlaceDetails(id) {
         [id],
         (_, result) => {
           console.log(result);
-          resolve(result);
+          resolve(result.rows._array[0]);
         },
         (_, error) => {
           reject(error);
