@@ -6,15 +6,35 @@ import {
 } from "expo-location";
 import OutlinedButton from "../UI/OutlinedButton";
 import { Colors } from "../../constants/colors";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getMapPreview } from "../../util/location";
-import { useNavigation } from "@react-navigation/native";
-function LocationPicker() {
+import {
+  useNavigation,
+  useRoute,
+  useIsFocused,
+} from "@react-navigation/native";
+function LocationPicker({ onPickLocation }) {
   const [pickedLocation, setPickedLocation] = useState();
-
+  const isFocused = useIsFocused();
   const navigation = useNavigation();
+  const route = useRoute();
   const [locationPermissionInformation, requestPermission] =
     useForegroundPermissions();
+
+  useEffect(() => {
+    if (isFocused && route.params) {
+      const mapPickedLocation = route.params && {
+        lat: route.params.pickedLat,
+        lng: route.params.pickedLng,
+      };
+      setPickedLocation(mapPickedLocation);
+    }
+  }, [route, isFocused]);
+
+  useEffect(() => {
+    onPickLocation(pickedLocation);
+  }, [pickedLocation, onPickLocation]);
+
   async function verifyPermissions() {
     if (
       locationPermissionInformation.status === PermissionStatus.UNDETERMINED
@@ -58,7 +78,7 @@ function LocationPicker() {
       <Image
         style={styles.image}
         source={{
-          uir: getMapPreview(pickedLocation.lat, pickedLocation.lng),
+          uri: getMapPreview(pickedLocation.lat, pickedLocation.lng),
         }}
       />
     );
