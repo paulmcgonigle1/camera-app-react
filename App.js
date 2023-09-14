@@ -7,8 +7,35 @@ import AddPlace from "./screens/AddPlace";
 import IconButton from "./components/UI/IconButton";
 import { Colors } from "./constants/colors";
 import Map from "./screens/Map";
+import { useEffect, useState } from "react";
+import { init } from "./util/database";
+import AppLoading from "expo-app-loading";
+import * as SplashScreen from "expo-splash-screen";
+import PlaceDetails from "./screens/PlaceDetails";
+
 const Stack = createNativeStackNavigator();
 export default function App() {
+  console.disableYellowBox = true;
+  const [dbInitialized, setDbInitialized] = useState(false);
+  useEffect(() => {
+    const initializeApp = async () => {
+      try {
+        await init();
+        // Initialize your app's other resources here if needed.
+
+        // Hide the splash screen when initialization is complete.
+        await SplashScreen.hideAsync();
+        setDbInitialized(true);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    // Prevent the splash screen from auto-hiding.
+    SplashScreen.preventAutoHideAsync();
+
+    initializeApp();
+  }, []);
+
   return (
     <>
       <StatusBar style="dark" />
@@ -41,6 +68,7 @@ export default function App() {
             options={{ title: "Add a new Place" }}
           />
           <Stack.Screen name="Map" component={Map}></Stack.Screen>
+          <Stack.Screen name="PlaceDetails" component={PlaceDetails} />
         </Stack.Navigator>
       </NavigationContainer>
     </>
